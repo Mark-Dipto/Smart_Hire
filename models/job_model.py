@@ -5,14 +5,14 @@ from datetime import datetime
 
 class JobModel:
     """Handle job-related database operations"""
-
+    
     @staticmethod
     def get_jobs_by_recruiter(recruiter_id):
         """Get all jobs for a recruiter"""
         conn = get_db_connection()
         if not conn:
             return []
-
+        
         try:
             cursor = conn.cursor(dictionary=True)
             cursor.execute(
@@ -26,14 +26,14 @@ class JobModel:
             if conn:
                 conn.close()
             return []
-
+    
     @staticmethod
     def get_active_jobs():
         """Get all active jobs"""
         conn = get_db_connection()
         if not conn:
             return []
-
+        
         try:
             cursor = conn.cursor(dictionary=True)
             cursor.execute("SELECT * FROM jobs WHERE is_active = 1")
@@ -44,14 +44,14 @@ class JobModel:
             if conn:
                 conn.close()
             return []
-
+    
     @staticmethod
     def get_job_by_id(job_id, recruiter_id=None):
         """Get job by ID, optionally verify recruiter ownership"""
         conn = get_db_connection()
         if not conn:
             return None
-
+        
         try:
             cursor = conn.cursor(dictionary=True)
             if recruiter_id:
@@ -68,14 +68,14 @@ class JobModel:
             if conn:
                 conn.close()
             return None
-
+    
     @staticmethod
     def create_job(recruiter_id, title, description, location):
         """Create a new job posting"""
         conn = get_db_connection()
         if not conn:
             return {'success': False, 'message': 'Database connection error'}
-
+        
         try:
             cursor = conn.cursor()
             cursor.execute(
@@ -90,3 +90,4 @@ class JobModel:
             if conn:
                 conn.close()
             return {'success': False, 'message': f'Error creating job: {str(e)}'}
+
