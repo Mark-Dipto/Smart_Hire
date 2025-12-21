@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Resume - SmartHire{% endblock %}
+
+{% block content %}
+<h1>Upload Resume</h1>
+<p style="margin-bottom: 20px; color: #666;">
+    Upload your resume (PDF, DOC, or DOCX). Our system will automatically extract your skills and experience.
+</p>
+
+<form method="POST" action="/candidate/upload_resume" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="resume">Select Resume File:</label>
+        <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx" required>
+        <small style="color: #666; display: block; margin-top: 5px;">
+            Supported formats: PDF, DOC, DOCX (Max 5MB)
+        </small>
+    </div>
+    
+    <button type="submit" class="btn">Upload & Analyze</button>
+    <a href="/candidate/dashboard" class="btn" style="background: #6c757d; margin-left: 10px;">Cancel</a>
+</form>
+{% endblock %}
+

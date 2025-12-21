@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Candidate Matches - SmartHire{% endblock %}
+
+{% block content %}
+<h1>Candidate Matches for: {{ job.title }}</h1>
+<p style="margin-bottom: 30px; color: #666;">
+    Candidates ranked by how well they match this job's requirements
+</p>
+
+<div class="card" style="margin-bottom: 30px;">
+    <h3>Job Details</h3>
+    <p><strong>Location:</strong> {{ job.location or 'Not specified' }}</p>
+    <p><strong>Description:</strong> {{ job.description }}</p>
+</div>
+
+{% if matches %}
+<h2>Matched Candidates</h2>
+{% for match in matches %}
+<div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
+        <div>
+            <h2 style="margin-bottom: 10px;">{{ match.candidate.name }}</h2>
+            <p style="color: #666; margin-bottom: 5px;"><strong>Email:</strong> {{ match.candidate.email }}</p>
+        </div>
+        <div style="text-align: right;">
+            <div class="match-score">{{ match.match_score }}%</div>
+            <p style="color: #666; font-size: 14px;">Match Score</p>
+        </div>
+    </div>
+    
+    {% if match.matching_skills %}
+    <div style="margin-bottom: 10px;">
+        <p><strong style="color: #28a745;">✓ Matching Skills:</strong></p>
+        <p>
+            {% for skill in match.matching_skills %}
+                <span style="background: #d4edda; color: #155724; padding: 5px 10px; border-radius: 3px; display: inline-block; margin: 5px 5px 5px 0;">{{ skill }}</span>
+            {% endfor %}
+        </p>
+    </div>
+    {% endif %}
+    
+    {% if match.missing_skills %}
+    <div>
+        <p><strong style="color: #dc3545;">✗ Missing Skills:</strong></p>
+        <p>
+            {% for skill in match.missing_skills %}
+                <span style="background: #f8d7da; color: #721c24; padding: 5px 10px; border-radius: 3px; display: inline-block; margin: 5px 5px 5px 0;">{{ skill }}</span>
+            {% endfor %}
+        </p>
+    </div>
+    {% endif %}
+</div>
+{% endfor %}
+{% else %}
+<div class="card">
+    <p>No matching candidates found yet. Make sure candidates have uploaded resumes with skills.</p>
+</div>
+{% endif %}
+
+<a href="/recruiter/dashboard" class="btn" style="margin-top: 20px;">Back to Dashboard</a>
+{% endblock %}
+

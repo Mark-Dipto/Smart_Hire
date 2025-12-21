@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SmartHire{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="container">
+        {% if session.user_id %}
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                {% if session.role == 'candidate' %}
+                    <li><a href="/candidate/dashboard">Dashboard</a></li>
+                    <li><a href="/candidate/upload_resume">Upload Resume</a></li>
+                    <li><a href="/candidate/matches">Job Matches</a></li>
+                {% elif session.role == 'recruiter' %}
+                    <li><a href="/recruiter/dashboard">Dashboard</a></li>
+                    <li><a href="/recruiter/create_job">Post Job</a></li>
+                {% endif %}
+                <li style="margin-left: auto;"><a href="/logout">Logout ({{ session.name }})</a></li>
+            </ul>
+        </nav>
+        {% endif %}
+        
+        <div class="flash-messages">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+        
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
+

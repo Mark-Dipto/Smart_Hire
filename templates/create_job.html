@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Post Job - SmartHire{% endblock %}
+
+{% block content %}
+<h1>Post a New Job</h1>
+<p style="margin-bottom: 20px; color: #666;">
+    Create a job posting. Our system will automatically match it with qualified candidates.
+</p>
+
+<form method="POST" action="/recruiter/create_job">
+    <div class="form-group">
+        <label for="title">Job Title:</label>
+        <input type="text" id="title" name="title" required placeholder="e.g., Senior Python Developer">
+    </div>
+    
+    <div class="form-group">
+        <label for="description">Job Description:</label>
+        <textarea id="description" name="description" required placeholder="Describe the role, responsibilities, and requirements..."></textarea>
+    </div>
+    
+    <div class="form-group">
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" placeholder="e.g., New York, NY or Remote">
+    </div>
+    
+    <div class="form-group">
+        <label for="skills">Required Skills (comma-separated):</label>
+        <input type="text" id="skills" name="skills" placeholder="e.g., python, flask, mysql, javascript">
+        <small style="color: #666; display: block; margin-top: 5px;">
+            Enter skills separated by commas. These will be used for matching candidates.
+        </small>
+    </div>
+    
+    <button type="submit" class="btn">Post Job</button>
+    <a href="/recruiter/dashboard" class="btn" style="background: #6c757d; margin-left: 10px;">Cancel</a>
+</form>
+{% endblock %}
+

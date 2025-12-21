@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Candidate Dashboard - SmartHire{% endblock %}
+
+{% block content %}
+<h1>Welcome, {{ session.name }}!</h1>
+<p style="margin-bottom: 30px; color: #666;">Manage your resume and discover job opportunities</p>
+
+<div style="display: flex; gap: 20px; margin-bottom: 30px;">
+    <a href="/candidate/upload_resume" class="btn">Upload Resume</a>
+    <a href="/candidate/matches" class="btn">View Job Matches</a>
+</div>
+
+<h2>Your Resumes</h2>
+{% if resumes %}
+<table>
+    <thead>
+        <tr>
+            <th>File</th>
+            <th>Upload Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for resume in resumes %}
+        <tr>
+            <td>{{ resume.file_path.split('/')[-1] }}</td>
+            <td>{{ resume.upload_date }}</td>
+            <td>
+                <a href="/candidate/matches" class="btn" style="padding: 5px 10px; font-size: 14px;">View Matches</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="card">
+    <p>No resumes uploaded yet. <a href="/candidate/upload_resume">Upload your first resume</a> to get started!</p>
+</div>
+{% endif %}
+
+{% if profile %}
+<h2 style="margin-top: 30px;">Your Profile</h2>
+<div class="card">
+    <p><strong>Location:</strong> {{ profile.location or 'Not set' }}</p>
+    <p><strong>Experience:</strong> {{ profile.total_experience_years or 'Not set' }} years</p>
+    {% if profile.summary %}
+    <p><strong>Summary:</strong> {{ profile.summary }}</p>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}
+
