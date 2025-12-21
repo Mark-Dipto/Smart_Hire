@@ -3,7 +3,7 @@ DB_CONFIG = {
     'host': 'sql12.freesqldatabase.com',
     'database': 'sql12812279',
     'user': 'sql12812279',  # Update with your actual username
-    'password': ''  # Update with your actual password
+    'password': 'jyqhrRXsKQ'
 }
 
 # Application Configuration
