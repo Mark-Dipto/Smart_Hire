@@ -46,4 +46,4 @@ app.add_url_rule('/recruiter/create_job', 'create_job', create_job, methods=['GE
 app.add_url_rule('/recruiter/job/<int:job_id>/matches', 'job_matches', job_matches, methods=['GET'])
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=False, host='0.0.0.0', port=5000, threaded=True)
