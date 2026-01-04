@@ -4,86 +4,142 @@
 
 {% block content %}
 <div class="flex-between" style="margin-bottom: 2rem; align-items: center;">
+  <div>
     <h1>Careers</h1>
-    {% if not session.user_id %}
-        <a href="/login" class="btn btn-sm btn-secondary">Login to see Match Scores</a>
-    {% endif %}
+    <p>Explore open positions and find your next opportunity.</p>
+  </div>
+  {% if not session.user_id %}
+    <a href="/login" class="btn btn-sm btn-secondary">Login to see Match Scores</a>
+  {% endif %}
 </div>
 
-<div class="card" style="background: var(--surface); padding: 1.5rem; margin-bottom: 2rem;">
-    <form action="/careers" method="GET" style="max-width: 100%; display: flex; gap: 1rem; margin-top: 0;">
-        <input type="text" name="q" placeholder="Search by job title or keyword..." value="{{ query }}" style="flex: 1;">
-        
-        <select name="sort" style="width: 200px;">
-            <option value="date" {% if sort_by == 'date' %}selected{% endif %}>Newest First</option>
-            <option value="match" {% if sort_by == 'match' %}selected{% endif %}>Best Match Score</option>
-        </select>
-        
-        <button type="submit" class="btn">Search</button>
-    </form>
+<div class="card" style="padding: 1.5rem; margin-bottom: 2rem;">
+  <form action="/careers" method="GET"
+        style="max-width: 100%; display: flex; gap: 1rem; margin-top: 0; flex-wrap: wrap;">
+    <input type="text" name="q" placeholder="Search by job title or keyword..." value="{{ query }}"
+           style="flex: 1; min-width: 200px;">
+
+    <select name="sort" style="width: 200px;">
+      <option value="date" {% if sort_by == 'date' %}selected{% endif %}>Newest First</option>
+      <option value="match" {% if sort_by == 'match' %}selected{% endif %}>Best Match Score</option>
+    </select>
+
+    <button type="submit" class="btn">Search</button>
+  </form>
 </div>
 
 {% if jobs %}
-    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-        {% for job in jobs %}
-        <div class="card" style="margin-bottom: 0;">
-            <div class="flex-between">
-                <div>
-                    <h2 style="margin: 0 0 0.5rem 0; border: none; font-size: 1.5rem;">{{ job.title }}</h2>
-                    <p style="margin-bottom: 0.5rem; color: var(--text-muted);">
-                        📍 {{ job.location or 'Remote' }} &nbsp; • &nbsp; 📅 Posted: {{ job.created_at }}
-                    </p>
-                </div>
-                {% if session.user_id and session.role == 'candidate' %}
-                <div class="text-center">
-                    <div class="match-score">{{ job.match_score }}%</div>
-                    <div class="match-score-label">Match Score</div>
-                </div>
-                {% endif %}
-            </div>
-            
-            <p style="margin: 1rem 0; line-height: 1.6;">{{ job.description }}</p>
+  <div class="rich-list">
+    {% for job in jobs %}
+      {% set is_candidate = session.user_id and session.role == 'candidate' %}
 
-            {% if session.user_id and session.role == 'candidate' %}
-            <hr style="border: 0; border-top: 1px solid var(--border); margin: 1rem 0;">
-            <div style="display: flex; flex-wrap: wrap; gap: 2rem;">
-                {% if job.matching_skills %}
-                <div style="flex: 1; min-width: 200px;">
-                    <p style="font-size: 0.9rem; margin-bottom: 0.5rem;"><strong>✓ Skills You Have</strong></p>
-                    <div>
-                        {% for skill in job.matching_skills %}
-                            <span class="skill-tag skill-match">{{ skill }}</span>
-                        {% endfor %}
-                    </div>
-                </div>
-                {% endif %}
-                
-                {% if job.missing_skills %}
-                <div style="flex: 1; min-width: 200px;">
-                    <p style="font-size: 0.9rem; margin-bottom: 0.5rem;"><strong>✗ Skills Missing</strong></p>
-                    <div>
-                        {% for skill in job.missing_skills %}
-                            <span class="skill-tag skill-miss">{{ skill }}</span>
-                        {% endfor %}
-                    </div>
-                </div>
-                {% endif %}
+      <div class="rich-list-item {% if is_candidate %}grid-candidate{% else %}grid-default{% endif %}"
+           style="display: grid; gap: 1.5rem; align-items: center;">
+
+        <div class="item-main">
+          <h2 style="margin: 0; font-size: 1.25rem; margin-bottom: 0.25rem;">{{ job.title }}</h2>
+
+          <div class="item-meta" style="margin-bottom: 0.75rem;">
+            <span>📍 {{ job.location or 'Remote' }}</span>
+            <span>📅 Posted: {{ job.created_at }}</span>
+          </div>
+
+          <p style="margin-bottom: 1rem; color: var(--text-main); font-size: 0.95rem; line-height: 1.5;">
+            {{ job.description }}
+          </p>
+
+          {% if is_candidate %}
+            <div class="skills-wrap" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+              {% if job.matching_skills %}
+                {% for skill in job.matching_skills %}
+                  <span class="badge"
+                        style="background: #dcfce7; color: #166534; font-size: 0.75rem;">✓ {{ skill }}</span>
+                {% endfor %}
+              {% endif %}
+
+              {% if job.missing_skills %}
+                {% for skill in job.missing_skills %}
+                  <span class="badge"
+                        style="background: #fee2e2; color: #991b1b; font-size: 0.75rem;">✗ {{ skill }}</span>
+                {% endfor %}
+              {% endif %}
             </div>
-            {% endif %}
-            
-            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
-                <form action="/candidate/apply/{{ job.job_id }}" method="POST" style="margin: 0; width: auto;">
-                    <button type="submit" class="btn">Apply Now</button>
-                </form>
-            </div>
+          {% endif %}
         </div>
-        {% endfor %}
-    </div>
+
+        {% if is_candidate %}
+          <div class="match-score text-center"
+               style="border-left: 1px solid var(--border);
+                      border-right: 1px solid var(--border);
+                      height: 100%;
+                      display: flex;
+                      flex-direction: column;
+                      justify-content: center;">
+            <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.25rem;">
+              AI Match Score
+            </div>
+
+            {% if job.match_score >= 70 %}
+              <div style="font-size: 2rem; font-weight: 800; color: var(--success); line-height: 1;">
+                {{ job.match_score }}%
+              </div>
+              <span class="badge badge-success" style="margin-top: 0.5rem;">Excellent Match</span>
+            {% elif job.match_score >= 40 %}
+              <div style="font-size: 2rem; font-weight: 800; color: #d97706; line-height: 1;">
+                {{ job.match_score }}%
+              </div>
+              <span class="badge" style="background: #fef3c7; color: #d97706; margin-top: 0.5rem;">
+                Good Match
+              </span>
+            {% else %}
+              <div style="font-size: 2rem; font-weight: 800; color: var(--text-muted); line-height: 1;">
+                {{ job.match_score }}%
+              </div>
+              <span class="badge badge-neutral" style="margin-top: 0.5rem;">Low Match</span>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        <div class="apply-col"
+             style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.75rem;">
+          <form action="/candidate/apply/{{ job.job_id }}" method="POST" style="margin: 0; width: 100%;">
+            <button type="submit" class="btn btn-full">Apply Now</button>
+          </form>
+        </div>
+
+      </div>
+    {% endfor %}
+  </div>
 {% else %}
-    <div class="card text-center" style="padding: 3rem;">
-        <h3>No jobs found</h3>
-        <p>Try adjusting your search terms or browse all jobs.</p>
-        <a href="/careers" class="btn btn-secondary">Clear Search</a>
-    </div>
+  <div class="empty-state" style="padding: 3rem;">
+    <div style="font-size: 3rem; margin-bottom: 1rem;">🔍</div>
+    <h3>No jobs found</h3>
+    <p>Try adjusting your search terms or browse all jobs.</p>
+    <a href="/careers" class="btn btn-secondary">Clear Search</a>
+  </div>
 {% endif %}
+
+<style>
+  /* Avoid Jinja inside CSS properties that VS Code validates.
+     Use classes to switch grid templates instead. */
+  .grid-candidate { grid-template-columns: 2fr 1fr 1fr; }
+  .grid-default   { grid-template-columns: 3fr 1fr; }
+
+  @media (max-width: 900px) {
+    .rich-list-item {
+      grid-template-columns: 1fr !important;
+      gap: 1.5rem !important;
+      text-align: center;
+    }
+    .item-main { text-align: center; }
+    .match-score {
+      border: none !important;
+      border-top: 1px solid var(--border) !important;
+      border-bottom: 1px solid var(--border) !important;
+      padding: 1rem 0;
+      height: auto !important;
+    }
+    .skills-wrap { justify-content: center; }
+  }
+</style>
 {% endblock %}

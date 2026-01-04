@@ -14,9 +14,7 @@
             <span>📅 Posted: {{ job.created_at }}</span>
         </p>
     </div>
-    
-    <div>
-        </div>
+    <div></div>
 </div>
 
 {% if applications %}
@@ -34,7 +32,7 @@
         </div>
         <div class="stat-card" style="border-bottom: 3px solid var(--success);">
             <div class="stat-value" style="color: var(--success);">{{ accepted_count }}</div>
-            <div class="stat-label">Shortlisted</div>
+            <div class="stat-label">Accepted</div>
         </div>
     </div>
 
@@ -95,6 +93,9 @@
                             </button>
                         </form>
                     </div>
+                {% elif app.status == 'offered' %}
+                    <span class="badge" style="background: #dbeafe; color: #1e40af; font-size: 0.9rem; padding: 0.5rem;">✉️ Offer Sent</span>
+                    <span style="font-size: 0.8rem; color: var(--text-muted);">Waiting for candidate...</span>
                 {% elif app.status == 'accepted' %}
                     <span class="badge badge-success" style="font-size: 1rem; padding: 0.5rem 1rem;">✓ Accepted</span>
                 {% elif app.status == 'rejected' %}

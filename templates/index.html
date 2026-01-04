@@ -1,54 +1,5 @@
 {% extends "base.html" %}
 
-<<<<<<< HEAD
-{% block title %}SmartHire - Home{% endblock %}
-
-{% block content %}
-<div style="text-align: center; padding: 50px 0;">
-    <h1 style="font-size: 48px; color: #667eea; margin-bottom: 20px;">SmartHire</h1>
-    <p style="font-size: 20px; color: #666; margin-bottom: 40px;">
-        Intelligent Resume Matching & Career Insights Platform
-    </p>
-    
-    {% if not session.user_id %}
-    <div style="display: flex; gap: 20px; justify-content: center;">
-        <a href="/login" class="btn">Login</a>
-        <a href="/register" class="btn">Register</a>
-    </div>
-    {% else %}
-    <div>
-        <h2>Welcome, {{ session.name }}!</h2>
-        {% if session.role == 'candidate' %}
-            <a href="/candidate/dashboard" class="btn" style="margin-top: 20px;">Go to Dashboard</a>
-        {% elif session.role == 'recruiter' %}
-            <a href="/recruiter/dashboard" class="btn" style="margin-top: 20px;">Go to Dashboard</a>
-        {% endif %}
-    </div>
-    {% endif %}
-    
-    <div style="margin-top: 60px; text-align: left; max-width: 800px; margin-left: auto; margin-right: auto;">
-        <h2 style="text-align: center; margin-bottom: 30px;">Features</h2>
-        <div class="card">
-            <h3>📄 Resume Analysis</h3>
-            <p>Upload your resume and let our system extract your skills, experience, and qualifications automatically.</p>
-        </div>
-        <div class="card">
-            <h3>🎯 Smart Matching</h3>
-            <p>Get matched with jobs that fit your profile based on skill compatibility and requirements.</p>
-        </div>
-        <div class="card">
-            <h3>💼 Job Posting</h3>
-            <p>Recruiters can post jobs and find the best candidates automatically matched to their requirements.</p>
-        </div>
-        <div class="card">
-            <h3>📊 Career Insights</h3>
-            <p>Discover skill gaps and get recommendations for roles that match your profile.</p>
-        </div>
-    </div>
-</div>
-{% endblock %}
-
-=======
 {% block title %}SmartHire - Intelligent Recruitment{% endblock %}
 
 {% block content %}
@@ -99,4 +50,3 @@
     </div>
 </div>
 {% endblock %}
->>>>>>> 60a626c (Resolve merge conflicts)
