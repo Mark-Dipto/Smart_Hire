@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+<<<<<<< HEAD
 {% block title %}Candidate Dashboard - SmartHire{% endblock %}
 
 {% block content %}
@@ -51,3 +52,136 @@
 {% endif %}
 {% endblock %}
 
+=======
+{% block title %}Dashboard - SmartHire{% endblock %}
+
+{% block content %}
+<div style="margin-bottom: 2rem;">
+    <h1>Hello, {{ session.name }} 👋</h1>
+    <p>Here's what's happening with your job search today.</p>
+</div>
+
+<div class="stats-row">
+    <div class="stat-card">
+        <div class="stat-icon">📄</div>
+        <div class="stat-value">{{ stats.resumes }}</div>
+        <div class="stat-label">Resumes Uploaded</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">🔥</div>
+        <div class="stat-value">{{ stats.high_matches }}</div>
+        <div class="stat-label">High Match Jobs</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">🚀</div>
+        <div class="stat-value">{{ stats.applications }}</div>
+        <div class="stat-label">Applications Sent</div>
+    </div>
+</div>
+
+<div class="dashboard-grid">
+    <div class="main-column">
+        
+        <h2 style="margin-bottom: 1rem;">Your Applications</h2>
+        {% if applications %}
+            <div class="rich-list" style="margin-bottom: 3rem;">
+                {% for app in applications %}
+                <div class="rich-list-item">
+                    <div class="item-main">
+                        <h3>{{ app.title }}</h3>
+                        <div class="item-meta">
+                            <span>📍 {{ app.location or 'Remote' }}</span>
+                            <span>📅 Applied: {{ app.applied_at }}</span>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        {% if app.status == 'accepted' %}
+                            <span class="badge badge-success">Accepted</span>
+                        {% elif app.status == 'rejected' %}
+                            <span class="badge badge-danger">Rejected</span>
+                        {% else %}
+                            <span class="badge" style="background: #fffbeb; color: #b45309;">Pending</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state" style="margin-bottom: 3rem;">
+                <p>You haven't applied to any jobs yet.</p>
+                <a href="/careers" class="btn">Browse Jobs</a>
+            </div>
+        {% endif %}
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h2>Top Job Matches</h2>
+            <a href="/careers?sort=match" style="text-decoration: none; color: var(--primary); font-weight: 500;">View All &rarr;</a>
+        </div>
+        
+        {% if top_matches %}
+            <div class="rich-list" style="margin-bottom: 3rem;">
+                {% for match in top_matches %}
+                <div class="rich-list-item">
+                    <div class="item-main">
+                        <h3>{{ match.job.title }}</h3>
+                        <div class="item-meta">
+                            <span>📍 {{ match.job.location or 'Remote' }}</span>
+                            <span>📅 Posted {{ match.job.created_at }}</span>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div style="color: var(--success); font-weight: 800; font-size: 1.25rem;">{{ match.match_score }}%</div>
+                        <span class="badge badge-success">Match</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state" style="margin-bottom: 3rem;">
+                <p>No new job matches found.</p>
+            </div>
+        {% endif %}
+
+        <h2>Your Resumes</h2>
+        {% if resumes %}
+            <div class="rich-list">
+                {% for resume in resumes %}
+                <div class="rich-list-item">
+                    <div class="item-main">
+                        <h3>{{ resume.file_path.split('/')[-1] }}</h3>
+                        <div class="item-meta">
+                            <span>Uploaded on {{ resume.upload_date }}</span>
+                        </div>
+                    </div>
+                    <a href="/careers?sort=match" class="btn btn-sm btn-secondary">Find Jobs</a>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <p style="margin-bottom: 1.5rem;">You haven't uploaded a resume yet.</p>
+                <a href="/candidate/upload_resume" class="btn">Upload Resume</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="side-panel">
+        <div class="card">
+            <h3>Quick Actions</h3>
+            <a href="/candidate/upload_resume" class="btn btn-full" style="margin-bottom: 1rem;">Upload New Resume</a>
+            <a href="/careers" class="btn btn-secondary btn-full">Browse All Jobs</a>
+        </div>
+
+        <div class="card">
+            <h3>My Profile</h3>
+            {% if profile %}
+                <p><strong>Location:</strong><br> {{ profile.location or 'Not set' }}</p>
+                <p><strong>Experience:</strong><br> {{ profile.total_experience_years or '0' }} years</p>
+            {% else %}
+                <p style="font-size: 0.9rem; color: var(--text-muted);">Profile details extracted from your resume will appear here.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+>>>>>>> 60a626c (Resolve merge conflicts)

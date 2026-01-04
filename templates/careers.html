@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Careers - Search Jobs{% endblock %}
+
+{% block content %}
+<div class="flex-between" style="margin-bottom: 2rem; align-items: center;">
+    <h1>Careers</h1>
+    {% if not session.user_id %}
+        <a href="/login" class="btn btn-sm btn-secondary">Login to see Match Scores</a>
+    {% endif %}
+</div>
+
+<div class="card" style="background: var(--surface); padding: 1.5rem; margin-bottom: 2rem;">
+    <form action="/careers" method="GET" style="max-width: 100%; display: flex; gap: 1rem; margin-top: 0;">
+        <input type="text" name="q" placeholder="Search by job title or keyword..." value="{{ query }}" style="flex: 1;">
+        
+        <select name="sort" style="width: 200px;">
+            <option value="date" {% if sort_by == 'date' %}selected{% endif %}>Newest First</option>
+            <option value="match" {% if sort_by == 'match' %}selected{% endif %}>Best Match Score</option>
+        </select>
+        
+        <button type="submit" class="btn">Search</button>
+    </form>
+</div>
+
+{% if jobs %}
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        {% for job in jobs %}
+        <div class="card" style="margin-bottom: 0;">
+            <div class="flex-between">
+                <div>
+                    <h2 style="margin: 0 0 0.5rem 0; border: none; font-size: 1.5rem;">{{ job.title }}</h2>
+                    <p style="margin-bottom: 0.5rem; color: var(--text-muted);">
+                        📍 {{ job.location or 'Remote' }} &nbsp; • &nbsp; 📅 Posted: {{ job.created_at }}
+                    </p>
+                </div>
+                {% if session.user_id and session.role == 'candidate' %}
+                <div class="text-center">
+                    <div class="match-score">{{ job.match_score }}%</div>
+                    <div class="match-score-label">Match Score</div>
+                </div>
+                {% endif %}
+            </div>
+            
+            <p style="margin: 1rem 0; line-height: 1.6;">{{ job.description }}</p>
+
+            {% if session.user_id and session.role == 'candidate' %}
+            <hr style="border: 0; border-top: 1px solid var(--border); margin: 1rem 0;">
+            <div style="display: flex; flex-wrap: wrap; gap: 2rem;">
+                {% if job.matching_skills %}
+                <div style="flex: 1; min-width: 200px;">
+                    <p style="font-size: 0.9rem; margin-bottom: 0.5rem;"><strong>✓ Skills You Have</strong></p>
+                    <div>
+                        {% for skill in job.matching_skills %}
+                            <span class="skill-tag skill-match">{{ skill }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if job.missing_skills %}
+                <div style="flex: 1; min-width: 200px;">
+                    <p style="font-size: 0.9rem; margin-bottom: 0.5rem;"><strong>✗ Skills Missing</strong></p>
+                    <div>
+                        {% for skill in job.missing_skills %}
+                            <span class="skill-tag skill-miss">{{ skill }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+            
+            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                <form action="/candidate/apply/{{ job.job_id }}" method="POST" style="margin: 0; width: auto;">
+                    <button type="submit" class="btn">Apply Now</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="card text-center" style="padding: 3rem;">
+        <h3>No jobs found</h3>
+        <p>Try adjusting your search terms or browse all jobs.</p>
+        <a href="/careers" class="btn btn-secondary">Clear Search</a>
+    </div>
+{% endif %}
+{% endblock %}

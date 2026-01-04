@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}SmartHire{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<<<<<<< HEAD
     {% block extra_css %}{% endblock %}
 </head>
 <body>
@@ -26,6 +27,36 @@
         </nav>
         {% endif %}
         
+=======
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/" class="logo">SmartHire</a></li>
+            <div style="display: flex; gap: 10px; align-items: center;">
+                {# Only show Careers to guests or candidates. Recruiters see nothing. #}
+                {% if not session.user_id or session.role == 'candidate' %}
+                    <li><a href="/careers">Careers</a></li>
+                {% endif %}
+                
+                {% if session.user_id %}
+                    {% if session.role == 'candidate' %}
+                        <li><a href="/candidate/dashboard">Dashboard</a></li>
+                    {% elif session.role == 'recruiter' %}
+                        <li><a href="/recruiter/dashboard">Dashboard</a></li>
+                    {% endif %}
+                    <li><a href="/logout" class="btn-sm btn-secondary" style="margin-left: 10px;">Logout</a></li>
+                {% else %}
+                    <li><a href="/recruiters">For Recruiters</a></li>
+                    <li><a href="/login" class="btn">Login</a></li>
+                {% endif %}
+            </div>
+        </ul>
+    </nav>
+
+    <div class="container">
+>>>>>>> 60a626c (Resolve merge conflicts)
         <div class="flash-messages">
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
@@ -38,6 +69,15 @@
         
         {% block content %}{% endblock %}
     </div>
+<<<<<<< HEAD
 </body>
 </html>
 
+=======
+    
+    <footer style="text-align: center; padding: 3rem 0; color: #94a3b8; font-size: 0.9rem; margin-top: auto;">
+        &copy; 2025 SmartHire Platform
+    </footer>
+</body>
+</html>
+>>>>>>> 60a626c (Resolve merge conflicts)

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+<<<<<<< HEAD
 {% block title %}SmartHire - Home{% endblock %}
 
 {% block content %}
@@ -47,3 +48,55 @@
 </div>
 {% endblock %}
 
+=======
+{% block title %}SmartHire - Intelligent Recruitment{% endblock %}
+
+{% block content %}
+<div class="hero" style="text-align: center; padding: 5rem 0 3rem 0;">
+    <h1 style="
+        font-size: 3.5rem;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    ">
+        Find Your Perfect Match
+    </h1>
+
+    <p style="font-size: 1.25rem; max-width: 700px; margin: 0 auto 2.5rem auto; color: var(--secondary);">
+        SmartHire uses advanced AI to match candidates with jobs based on real skills and compatibility, not just keywords.
+    </p>
+    
+    {% if session.user_id %}
+    <div style="margin-bottom: 3rem;">
+        {% if session.role == 'candidate' %}
+            <a href="/candidate/dashboard" class="btn" style="padding: 1rem 2rem;">Go to Dashboard</a>
+        {% elif session.role == 'recruiter' %}
+            <a href="/recruiter/dashboard" class="btn" style="padding: 1rem 2rem;">Go to Dashboard</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+<div class="grid-features" style="margin-bottom: 4rem;">
+    <div class="card" style="text-align: center;">
+        <div style="font-size: 2.5rem; margin-bottom: 1rem;">💼</div>
+        <h3>For Recruiters</h3>
+        <p>Post jobs and automatically see the most qualified candidates ranked by relevance.</p>
+    </div>
+
+    <div class="card" style="text-align: center;">
+        <div style="font-size: 2.5rem; margin-bottom: 1rem;">🤝</div>
+        <h3>Smart Matching</h3>
+        <p>Our algorithm analyzes experience, skills, and requirements to calculate a precise Match Score.</p>
+    </div>
+
+    <div class="card" style="text-align: center;">
+        <div style="font-size: 2.5rem; margin-bottom: 1rem;">🚀</div>
+        <h3>For Job Seekers</h3>
+        <p>Upload your resume and get instantly matched with jobs that fit your unique skill set.</p>
+    </div>
+</div>
+{% endblock %}
+>>>>>>> 60a626c (Resolve merge conflicts)

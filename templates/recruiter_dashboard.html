@@ -3,6 +3,7 @@
 {% block title %}Recruiter Dashboard - SmartHire{% endblock %}
 
 {% block content %}
+<<<<<<< HEAD
 <h1>Welcome, {{ session.name }}!</h1>
 <p style="margin-bottom: 30px; color: #666;">Manage your job postings and find the best candidates</p>
 
@@ -49,3 +50,88 @@
 {% endif %}
 {% endblock %}
 
+=======
+<div style="margin-bottom: 2rem;">
+    <h1>Recruiter Dashboard</h1>
+    <p>Manage your job postings and find the best talent.</p>
+</div>
+
+<div class="stats-row">
+    <div class="stat-card">
+        <div class="stat-icon">💼</div>
+        <div class="stat-value">{{ stats.active_jobs }}</div>
+        <div class="stat-label">Active Jobs</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">📊</div>
+        <div class="stat-value">{{ stats.total_jobs }}</div>
+        <div class="stat-label">Total Posted</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div class="stat-value">{{ stats.total_applications }}</div>
+        <div class="stat-label">Total Applications</div>
+    </div>
+</div>
+
+<div class="dashboard-grid">
+    <div class="main-column">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2>Your Job Postings</h2>
+        </div>
+
+        {% if jobs %}
+            <div class="rich-list">
+                {% for job in jobs %}
+                <div class="rich-list-item">
+                    <div class="item-main">
+                        <h3>{{ job.title }}</h3>
+                        <div class="item-meta">
+                            <span>📍 {{ job.location or 'Remote' }}</span>
+                            <span>📅 {{ job.created_at }}</span>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem;">
+                        {% if job.is_active %}
+                            <span class="badge badge-success">Active</span>
+                        {% else %}
+                            <span class="badge badge-neutral">Closed</span>
+                        {% endif %}
+                        
+                        <div class="btn-group" style="margin-top: 0; gap: 0.5rem;">
+                            <a href="/recruiter/job/{{ job.job_id }}/applications" class="btn btn-sm">Applications</a>
+                            <a href="/recruiter/job/{{ job.job_id }}/matches" class="btn btn-sm btn-secondary">AI Matches</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">📝</div>
+                <h3>No jobs posted yet</h3>
+                <p style="margin-bottom: 2rem;">Create your first job posting to start finding candidates.</p>
+                <a href="/recruiter/create_job" class="btn">Post a Job</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="side-panel">
+        <div class="card">
+            <h3>Quick Actions</h3>
+            <p style="font-size: 0.9rem;">Ready to hire? Post a new position to find candidates.</p>
+            <a href="/recruiter/create_job" class="btn btn-full">Post New Job</a>
+        </div>
+        
+        <div class="card" style="background: #eff6ff; border-color: #dbeafe;">
+            <h3 style="color: var(--primary);">Tips</h3>
+            <ul style="padding-left: 1.2rem; font-size: 0.9rem; color: var(--text-muted);">
+                <li style="margin-bottom: 0.5rem;">Include specific skills (e.g., "Python", "React") for better matching.</li>
+                <li>Check "Applications" for people who have applied, and "AI Matches" for proactive sourcing.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+>>>>>>> 60a626c (Resolve merge conflicts)

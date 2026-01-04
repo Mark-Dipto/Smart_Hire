@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}Applications - {{ job.title }}{% endblock %}
+
+{% block content %}
+<div class="flex-between" style="margin-bottom: 2rem; align-items: flex-start;">
+    <div>
+        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+            <a href="/recruiter/dashboard" style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem;">&larr; Back to Dashboard</a>
+        </div>
+        <h1 style="margin-bottom: 0.5rem;">{{ job.title }}</h1>
+        <p style="margin: 0;">
+            <span style="margin-right: 1rem;">📍 {{ job.location or 'Remote' }}</span>
+            <span>📅 Posted: {{ job.created_at }}</span>
+        </p>
+    </div>
+    
+    <div>
+        </div>
+</div>
+
+{% if applications %}
+    {% set pending_count = applications | selectattr('status', 'equalto', 'pending') | list | length %}
+    {% set accepted_count = applications | selectattr('status', 'equalto', 'accepted') | list | length %}
+    
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-value">{{ applications|length }}</div>
+            <div class="stat-label">Total Applicants</div>
+        </div>
+        <div class="stat-card" style="border-bottom: 3px solid #f59e0b;">
+            <div class="stat-value" style="color: #d97706;">{{ pending_count }}</div>
+            <div class="stat-label">Pending Review</div>
+        </div>
+        <div class="stat-card" style="border-bottom: 3px solid var(--success);">
+            <div class="stat-value" style="color: var(--success);">{{ accepted_count }}</div>
+            <div class="stat-label">Shortlisted</div>
+        </div>
+    </div>
+
+    <div class="rich-list">
+        {% for app in applications %}
+        <div class="rich-list-item" style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 1rem; align-items: center;">
+            
+            <div class="item-main">
+                <h2 style="margin: 0; font-size: 1.25rem; margin-bottom: 0.25rem;">{{ app.name }}</h2>
+                <div style="display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.9rem; color: var(--text-muted);">
+                    <span>📧 <a href="mailto:{{ app.email }}" style="color: var(--text-muted); text-decoration: none; border-bottom: 1px dotted;">{{ app.email }}</a></span>
+                    <span>🕒 Applied: {{ app.applied_at }}</span>
+                </div>
+                
+                {% if app.resume_path %}
+                <div style="margin-top: 0.75rem;">
+                   <a href="{{ url_for('download_resume', filename=app.resume_filename) }}" target="_blank" 
+                      class="btn btn-sm btn-secondary" 
+                      style="display: inline-flex; align-items: center; gap: 5px; background: white; border: 1px solid var(--border);">
+                       <span style="color: #ef4444;">📄</span> View Resume
+                   </a>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="text-center" style="border-left: 1px solid var(--border); border-right: 1px solid var(--border);">
+                <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.25rem;">AI Match Score</div>
+                {% if app.match_score >= 70 %}
+                    <div style="font-size: 2rem; font-weight: 800; color: var(--success); line-height: 1;">{{ app.match_score }}%</div>
+                    <span class="badge badge-success" style="margin-top: 0.5rem;">Excellent</span>
+                {% elif app.match_score >= 40 %}
+                    <div style="font-size: 2rem; font-weight: 800; color: #d97706; line-height: 1;">{{ app.match_score }}%</div>
+                    <span class="badge" style="background: #fef3c7; color: #d97706; margin-top: 0.5rem;">Moderate</span>
+                {% else %}
+                    <div style="font-size: 2rem; font-weight: 800; color: var(--text-muted); line-height: 1;">{{ app.match_score }}%</div>
+                    <span class="badge badge-neutral" style="margin-top: 0.5rem;">Low Match</span>
+                {% endif %}
+            </div>
+
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 0.75rem;">
+                <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0;">Status</div>
+                
+                {% if app.status == 'pending' %}
+                    <div style="display: flex; gap: 0.5rem; justify-content: center;">
+                        <form action="/recruiter/application/{{ app.application_id }}/update" method="POST" style="margin: 0;">
+                            <input type="hidden" name="job_id" value="{{ job.job_id }}">
+                            <input type="hidden" name="status" value="accepted">
+                            <button type="submit" class="btn btn-sm" style="background-color: var(--success);" title="Accept Candidate">
+                                ✓ Accept
+                            </button>
+                        </form>
+                        
+                        <form action="/recruiter/application/{{ app.application_id }}/update" method="POST" style="margin: 0;">
+                            <input type="hidden" name="job_id" value="{{ job.job_id }}">
+                            <input type="hidden" name="status" value="rejected">
+                            <button type="submit" class="btn btn-sm" style="background-color: white; color: var(--danger); border: 1px solid var(--danger);" title="Reject Candidate">
+                                ✗ Reject
+                            </button>
+                        </form>
+                    </div>
+                {% elif app.status == 'accepted' %}
+                    <span class="badge badge-success" style="font-size: 1rem; padding: 0.5rem 1rem;">✓ Accepted</span>
+                {% elif app.status == 'rejected' %}
+                    <span class="badge badge-danger" style="font-size: 1rem; padding: 0.5rem 1rem;">✗ Rejected</span>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="empty-state" style="margin-top: 2rem;">
+        <div style="font-size: 3rem; margin-bottom: 1rem;">📭</div>
+        <h3>No applications yet</h3>
+        <p>Candidates matching your criteria will appear here once they apply.</p>
+    </div>
+{% endif %}
+
+<style>
+    @media (max-width: 768px) {
+        .rich-list-item {
+            grid-template-columns: 1fr !important;
+            gap: 1.5rem !important;
+            text-align: center;
+        }
+        .item-main { text-align: center; }
+        .text-center { border: none !important; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 1rem 0; }
+        .item-main div { align-items: center; }
+        div[style*="align-items: center"] { align-items: center !important; }
+    }
+</style>
+{% endblock %}

@@ -4,6 +4,7 @@
 
 {% block content %}
 <h1>Post a New Job</h1>
+<<<<<<< HEAD
 <p style="margin-bottom: 20px; color: #666;">
     Create a job posting. Our system will automatically match it with qualified candidates.
 </p>
@@ -37,3 +38,37 @@
 </form>
 {% endblock %}
 
+=======
+<p>Create a job posting to automatically find qualified candidates.</p>
+
+<div class="card">
+    <form method="POST" action="/recruiter/create_job">
+        <div class="form-group">
+            <label for="title">Job Title</label>
+            <input type="text" id="title" name="title" required placeholder="e.g., Senior Python Developer">
+        </div>
+        
+        <div class="form-group">
+            <label for="description">Job Description</label>
+            <textarea id="description" name="description" required placeholder="Describe responsibilities and requirements..."></textarea>
+        </div>
+        
+        <div class="form-group">
+            <label for="location">Location</label>
+            <input type="text" id="location" name="location" placeholder="e.g., New York, NY or Remote">
+        </div>
+        
+        <div class="form-group">
+            <label for="skills">Required Skills</label>
+            <input type="text" id="skills" name="skills" placeholder="e.g., python, flask, mysql, javascript">
+            <small>Separate skills with commas. These are critical for the matching algorithm.</small>
+        </div>
+        
+        <div class="btn-group">
+            <button type="submit" class="btn">Post Job</button>
+            <a href="/recruiter/dashboard" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+>>>>>>> 60a626c (Resolve merge conflicts)

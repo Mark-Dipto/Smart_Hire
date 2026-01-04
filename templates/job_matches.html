@@ -3,6 +3,7 @@
 {% block title %}Candidate Matches - SmartHire{% endblock %}
 
 {% block content %}
+<<<<<<< HEAD
 <h1>Candidate Matches for: {{ job.title }}</h1>
 <p style="margin-bottom: 30px; color: #666;">
     Candidates ranked by how well they match this job's requirements
@@ -61,3 +62,64 @@
 <a href="/recruiter/dashboard" class="btn" style="margin-top: 20px;">Back to Dashboard</a>
 {% endblock %}
 
+=======
+<div class="flex-between">
+    <div>
+        <h1>Candidate Matches</h1>
+        <p>For Role: <strong>{{ job.title }}</strong></p>
+    </div>
+    <a href="/recruiter/dashboard" class="btn btn-secondary">Back to Dashboard</a>
+</div>
+
+<div class="card" style="background-color: #f1f5f9; border: none; margin-bottom: 2rem;">
+    <h3 style="margin-top: 0;">Job Overview</h3>
+    <p style="margin-bottom: 0.5rem;"><strong>Location:</strong> {{ job.location or 'Not specified' }}</p>
+    <p style="margin-bottom: 0;">{{ job.description }}</p>
+</div>
+
+{% if matches %}
+    {% for match in matches %}
+    <div class="card">
+        <div class="flex-between">
+            <div>
+                <h2 style="margin-top: 0; border: none;">{{ match.candidate.name }}</h2>
+                <p><strong>Email:</strong> {{ match.candidate.email }}</p>
+            </div>
+            <div class="text-center">
+                <div class="match-score">{{ match.match_score }}%</div>
+                <div class="match-score-label">Match Score</div>
+            </div>
+        </div>
+        
+        <hr style="border: 0; border-top: 1px solid var(--border); margin: 1rem 0;">
+
+        {% if match.matching_skills %}
+        <div style="margin-bottom: 1rem;">
+            <p><strong>✓ Matching Skills</strong></p>
+            <div>
+                {% for skill in match.matching_skills %}
+                    <span class="skill-tag skill-match">{{ skill }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        {% if match.missing_skills %}
+        <div>
+            <p><strong>✗ Missing Skills</strong></p>
+            <div>
+                {% for skill in match.missing_skills %}
+                    <span class="skill-tag skill-miss">{{ skill }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+{% else %}
+    <div class="card text-center">
+        <p>No matching candidates found yet.</p>
+    </div>
+{% endif %}
+{% endblock %}
+>>>>>>> 60a626c (Resolve merge conflicts)
