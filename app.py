@@ -4,17 +4,10 @@ import os
 from config import SECRET_KEY, UPLOAD_FOLDER, MAX_CONTENT_LENGTH
 
 # Import controllers
-<<<<<<< HEAD
-from controllers.main_controller import index
-from controllers.auth_controller import register, login, logout
-from controllers.candidate_controller import candidate_dashboard, upload_resume, candidate_matches
-from controllers.recruiter_controller import recruiter_dashboard, create_job, job_matches
-=======
 from controllers.main_controller import index, careers, recruiter_landing, download_resume
 from controllers.auth_controller import register_candidate, register_recruiter, login, logout
 from controllers.candidate_controller import candidate_dashboard, upload_resume, apply_job
 from controllers.recruiter_controller import recruiter_dashboard, create_job, job_matches, job_applications, update_application_status
->>>>>>> 60a626c (Resolve merge conflicts)
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -33,29 +26,6 @@ def set_cache_headers(response):
     response.headers['Expires'] = '0'
     return response
 
-<<<<<<< HEAD
-# Register routes
-# Main routes
-app.add_url_rule('/', 'index', index, methods=['GET'])
-
-# Authentication routes
-app.add_url_rule('/register', 'register', register, methods=['GET', 'POST'])
-app.add_url_rule('/login', 'login', login, methods=['GET', 'POST'])
-app.add_url_rule('/logout', 'logout', logout, methods=['GET'])
-
-# Candidate routes
-app.add_url_rule('/candidate/dashboard', 'candidate_dashboard', candidate_dashboard, methods=['GET'])
-app.add_url_rule('/candidate/upload_resume', 'upload_resume', upload_resume, methods=['GET', 'POST'])
-app.add_url_rule('/candidate/matches', 'candidate_matches', candidate_matches, methods=['GET'])
-
-# Recruiter routes
-app.add_url_rule('/recruiter/dashboard', 'recruiter_dashboard', recruiter_dashboard, methods=['GET'])
-app.add_url_rule('/recruiter/create_job', 'create_job', create_job, methods=['GET', 'POST'])
-app.add_url_rule('/recruiter/job/<int:job_id>/matches', 'job_matches', job_matches, methods=['GET'])
-
-if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0', port=5000, threaded=True)
-=======
 # --- Routes ---
 
 # Public Pages
@@ -84,4 +54,3 @@ app.add_url_rule('/recruiter/application/<int:application_id>/update', 'update_a
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=3306)
->>>>>>> 60a626c (Resolve merge conflicts)
