@@ -36,9 +36,6 @@ class JobModel:
         
         try:
             cursor = conn.cursor(dictionary=True)
-<<<<<<< HEAD
-            cursor.execute("SELECT * FROM jobs WHERE is_active = 1")
-=======
             cursor.execute("SELECT * FROM jobs WHERE is_active = 1 ORDER BY created_at DESC")
             jobs = cursor.fetchall()
             conn.close()
@@ -65,7 +62,6 @@ class JobModel:
                    ORDER BY created_at DESC""",
                 (search_term, search_term, search_term)
             )
->>>>>>> 60a626c (Resolve merge conflicts)
             jobs = cursor.fetchall()
             conn.close()
             return jobs
@@ -118,9 +114,4 @@ class JobModel:
         except Error as e:
             if conn:
                 conn.close()
-<<<<<<< HEAD
             return {'success': False, 'message': f'Error creating job: {str(e)}'}
-
-=======
-            return {'success': False, 'message': f'Error creating job: {str(e)}'}
->>>>>>> 60a626c (Resolve merge conflicts)
