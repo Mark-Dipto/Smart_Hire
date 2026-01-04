@@ -18,30 +18,17 @@ def is_recruiter():
     """Check if user is a recruiter"""
     return get_user_role() == 'recruiter'
 
-<<<<<<< HEAD
-def register():
-    """Handle user registration"""
-=======
 def register_candidate():
     """Handle candidate registration"""
->>>>>>> 60a626c (Resolve merge conflicts)
     if request.method == 'POST':
         name = request.form.get('name')
         email = request.form.get('email')
         password = request.form.get('password')
-<<<<<<< HEAD
-        role = request.form.get('role')
-        
-        if not all([name, email, password, role]):
-            flash('All fields are required', 'error')
-            return render_template('register.html')
-=======
         role = 'candidate' # Hardcoded for this route
         
         if not all([name, email, password]):
             flash('All fields are required', 'error')
             return render_template('register_candidate.html')
->>>>>>> 60a626c (Resolve merge conflicts)
         
         result = UserModel.register(name, email, password, role)
         
@@ -50,11 +37,6 @@ def register_candidate():
             return redirect(url_for('login'))
         else:
             flash(result['message'], 'error')
-<<<<<<< HEAD
-            return render_template('register.html')
-    
-    return render_template('register.html')
-=======
             return render_template('register_candidate.html')
     
     return render_template('register_candidate.html')
@@ -81,7 +63,6 @@ def register_recruiter():
             return render_template('register_recruiter.html')
     
     return render_template('register_recruiter.html')
->>>>>>> 60a626c (Resolve merge conflicts)
 
 def login():
     """Handle user login"""
@@ -113,9 +94,4 @@ def logout():
     """Handle user logout"""
     session.clear()
     flash('Logged out successfully', 'success')
-<<<<<<< HEAD
     return redirect(url_for('index'))
-
-=======
-    return redirect(url_for('index'))
->>>>>>> 60a626c (Resolve merge conflicts)
