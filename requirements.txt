@@ -5,3 +5,9 @@ Werkzeug==2.3.7
 Flask
 mysql-connector-python
 Werkzeug
+flask
+mysql-connector-python
+werkzeug
+pypdf
+python-docx
+nltk
